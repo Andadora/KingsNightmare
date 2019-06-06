@@ -1,3 +1,3 @@
 from Board import Board
 
-board = Board()
+board = Board(rook='A', king='H', knight='W')

@@ -15,7 +15,10 @@ class MyQueue:
         return self.elements[self.heap_positions[que_index]]
 
     def __str__(self):
-        return f'hpos:   {self.heap_positions}\nelind:  {self.elements_indexes}\naind:   {self.actual_indexes}'
+        queue = ''
+        for element in self.elements:
+            queue += str(element) + '\n'
+        return queue
 
     def is_empty(self):
         return not self.elements
@@ -84,16 +87,16 @@ class MyQueue:
         self.actual_indexes[element_to_remove.index] = -1
         return element_to_remove
 
-    def set_distance(self, element_index, new_distance):
+    def set_distance(self, element_index, new_graph_distance):
         que_index = self.actual_indexes[element_index]
         h_position = self.heap_positions[que_index]
-        new_combined_heuristic = new_distance + self.elements[h_position].heuristic_distance
-        old_combined_heuristic = self.elements[h_position].combined_heuristic
-        self.elements[h_position].distance = new_distance
-        self.elements[h_position].combined_heuristic = new_distance + self.elements[h_position].heuristic_distance
-        if new_combined_heuristic > old_combined_heuristic:         # jeśli nowy sumaryczny dystans jest większy:
+        new_distance = new_graph_distance + self.elements[h_position].heuristic_distance
+        old_distance = self.elements[h_position].distance
+        self.elements[h_position].graph_distance = new_graph_distance
+        self.elements[h_position].distance = new_graph_distance + self.elements[h_position].heuristic_distance
+        if new_distance > old_distance:         # jeśli nowy sumaryczny dystans jest większy:
             self.down_heap(h_position, len(self.elements) - 1)      # zepchnij element w dół kopca
-        if new_combined_heuristic < old_combined_heuristic:         # jeśli nowy sumaryczny dystans jest mniejszy:
+        if new_distance < old_distance:         # jeśli nowy sumaryczny dystans jest mniejszy:
             self.up_heap(0, h_position)                             # wypchnij element w górę
 
     def set_previous(self, element_index, new_previous):
